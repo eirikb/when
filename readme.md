@@ -7,9 +7,13 @@ Stubbing library for chained SDKs.
   
 I needed some way to test [pnpjs](https://github.com/pnp/pnpjs), and this library in combination with [ava](https://github.com/ava/ava) and [rewiremock](https://github.com/theKashey/rewiremock) works great.  
 
+## Install
 
+```bash
+npm i @eirikb/when
+```
 
-### Example Azure Function-ish setup
+## Example Azure Function-ish setup
 
 index.js
 ```js
