@@ -1,0 +1,20 @@
+{
+  "name": "@eirikb/when",
+  "version": "1.0.0",
+  "description": "Stubbing",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "keywords": [
+    "stub",
+    "stubbing",
+    "unit test",
+    "testing"
+  ],
+  "author": "Eirik Brandtzæg <eirikb@eirikb.no>",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^3.5.0"
+  }
+}
