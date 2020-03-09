@@ -52,3 +52,10 @@ test('Rewiremock default only on top level', t => {
   const stub = when(objectToStub);
   t.not(stub, stub.hello.default);
 });
+
+test('Mock any property', t => {
+  const { objectToStub } = t.context;
+  const stub = when(objectToStub);
+  stub.hello.thenReturn(1);
+  t.deepEqual(1, stub.hello);
+});
