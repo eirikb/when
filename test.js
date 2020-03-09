@@ -41,3 +41,14 @@ test('Stub by different arguments', t => {
   t.deepEqual(1, stub.hello.world(1).yes.no());
 });
 
+test('Rewiremock and default - should resolve to stub', t => {
+  const { objectToStub } = t.context;
+  const stub = when(objectToStub);
+  t.is(stub, stub.default);
+});
+
+test('Rewiremock default only on top level', t => {
+  const { objectToStub } = t.context;
+  const stub = when(objectToStub);
+  t.not(stub, stub.hello.default);
+});

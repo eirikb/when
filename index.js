@@ -8,6 +8,9 @@ module.exports = function (target) {
     const stub = new Proxy(target, {
       get: function (o, prop) {
         o = overrideO || o;
+        if (target === o && prop === 'default') {
+          return stub;
+        }
         if (prop === '_paths') {
           return Object.keys(stubs);
         }
