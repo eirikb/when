@@ -59,3 +59,24 @@ test('Mock any property', t => {
   stub.hello.thenReturn(1);
   t.deepEqual(1, stub.hello);
 });
+
+test('Stub function at root thenReturn', t => {
+  const fn = () => 1;
+  const stub = when(fn);
+  stub.thenReturn(2);
+  t.is(2, stub());
+});
+
+test('Stub function at root thenCall', t => {
+  const fn = () => 1;
+  const stub = when(fn);
+  t.plan(1);
+  stub.thenCall(() => t.pass());
+  stub();
+});
+
+test('Leave function at root if not overridden', t => {
+  const fn = () => 1;
+  const stub = when(fn);
+  t.is(1, stub());
+});

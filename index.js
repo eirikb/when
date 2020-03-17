@@ -1,11 +1,17 @@
 module.exports = function (target) {
   const stubs = {};
 
+  let rootFn;
+
   function when(target, path = '', overrideO) {
     if (stubs[path]) {
       return stubs[path];
     }
     const stub = new Proxy(target, {
+      apply(target, thisArg, argArray) {
+        if (path === '' && rootFn) return rootFn(...argArray);
+        return target(...argArray);
+      },
       get: function (o, prop) {
         o = overrideO || o;
         if (target === o && prop === 'default') {
@@ -18,10 +24,12 @@ module.exports = function (target) {
         } else if (prop === 'thenReturn') {
           return res => {
             stubs[path] = stubIsFunction ? () => res : res;
+            if (path === '') rootFn = stubs[path];
           }
         } else if (prop === 'thenCall') {
           return res => {
             stubs[path] = stubIsFunction ? (...args) => res(...args) : res;
+            if (path === '') rootFn = stubs[path];
           }
         }
         const val = o[prop];
