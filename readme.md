@@ -1,5 +1,7 @@
 # When
 
+[![Version](https://img.shields.io/npm/v/@eirikb/when.svg)](https://www.npmjs.com/package/@eirikb/when)
+
 Stubbing library for chained SDKs. 
   * Pass in a real object.
   * Every function call gets a new stub, mapped by arguments.
