@@ -5,7 +5,7 @@
 Stubbing library for chained SDKs. 
   * Pass in a real object.
   * Every function call gets a new stub, mapped by arguments.
-  * Last function can either `thenReturn` or `thenCall`.
+  * Last function or property can either `thenReturn` or `thenCall`.
   
 I needed some way to test [pnpjs](https://github.com/pnp/pnpjs), and this library in combination with [ava](https://github.com/ava/ava) and [rewiremock](https://github.com/theKashey/rewiremock) works great.  
 
