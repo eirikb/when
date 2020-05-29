@@ -1,18 +1,25 @@
-module.exports = function (target) {
-  const stubs = {};
+export const when = <T>(target: T) => {
+  return {
+    thenReturn: (toReturn: any) => (target as any).thenReturn(toReturn),
+    thenCall: (toCall: Function) => (target as any).thenCall(toCall),
+  };
+};
 
-  let rootFn;
+export default <T>(target: T): T => {
+  const stubs: { [key: string]: any } = {};
 
-  function when(target, path = '', overrideO) {
+  let rootFn: Function;
+
+  function when(target: any, path = '', overrideO?: any) {
     if (stubs[path]) {
       return stubs[path];
     }
-    const stub = new Proxy(target, {
-      apply(target, thisArg, argArray) {
+    const stub: ProxyHandler<any> = new Proxy(target, {
+      apply(target, _, argArray) {
         if (path === '' && rootFn) return rootFn(...argArray);
         return target(...argArray);
       },
-      get: function (o, prop) {
+      get: function(o, prop: string) {
         o = overrideO || o;
         if (target === o && prop === 'default') {
           return stub;
@@ -22,15 +29,17 @@ module.exports = function (target) {
         if (prop === '_paths') {
           return Object.keys(stubs);
         } else if (prop === 'thenReturn') {
-          return res => {
+          return (res: any) => {
             stubs[path] = stubIsFunction ? () => res : res;
             if (path === '') rootFn = stubs[path];
-          }
+          };
         } else if (prop === 'thenCall') {
-          return res => {
-            stubs[path] = stubIsFunction ? (...args) => res(...args) : res;
+          return (res: any) => {
+            stubs[path] = stubIsFunction
+              ? (...args: any[]) => res(...args)
+              : res;
             if (path === '') rootFn = stubs[path];
-          }
+          };
         }
         const val = o[prop];
         if (typeof val === 'function') {
@@ -38,17 +47,22 @@ module.exports = function (target) {
           if (stubs[subKey]) {
             return stubs[subKey];
           }
-          const fn = (...args) => {
+          const fn = (...args: any[]) => {
             try {
               const res = val.apply(o, args);
               if (res) {
                 if (res.catch) {
-                  res.catch(e => {
+                  res.catch((e: Error) => {
                     console.log('Path failed', path, prop);
                     throw e;
                   });
                 }
-                return when(res, `${path}.${prop}(${args.map(a => JSON.stringify(a)).join(',')})`);
+                return when(
+                  res,
+                  `${path}.${prop}(${args
+                    .map(a => JSON.stringify(a))
+                    .join(',')})`
+                );
               }
             } catch (e) {
               console.log('Path failed:', path, prop);
@@ -62,7 +76,7 @@ module.exports = function (target) {
         } else {
           return val;
         }
-      }
+      },
     });
     stubs[path] = stub;
     return stub;
