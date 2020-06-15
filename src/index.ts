@@ -1,6 +1,8 @@
 export const when = <T>(target: T) => {
   return {
-    thenReturn: (toReturn: any) => (target as any).thenReturn(toReturn),
+    thenReturn<X>(toReturn: X) {
+      return (target as any).thenReturn(toReturn);
+    },
     thenCall: (toCall: Function) => (target as any).thenCall(toCall),
   };
 };

@@ -123,3 +123,10 @@ test('Leave function at root if not overridden', t => {
   const stub = initWhen(fn);
   t.is(1, stub());
 });
+
+test('thenReturn with generic return', t => {
+  const fn = () => 1;
+  const stub = initWhen(fn);
+  when(stub).thenReturn<number>(2);
+  t.is(2, stub());
+});
